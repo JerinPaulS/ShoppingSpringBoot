@@ -1,4 +1,4 @@
-package com.shop.shopping.entities.services;
+package com.shop.shopping.services;
 
 import com.shop.shopping.dao.ProductRepository;
 import com.shop.shopping.entities.Product;
@@ -49,5 +49,9 @@ public class ProductService {
 
     public void deleteAllProducts() {
         productRepository.deleteAllInBatch();
+    }
+
+    public List<Product> findAllProductsByMinPrice(double min) {
+        return productRepository.findAllByPriceGreaterThanEqual(BigDecimal.valueOf(min));
     }
 }

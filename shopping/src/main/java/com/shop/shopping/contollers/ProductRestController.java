@@ -1,11 +1,11 @@
 package com.shop.shopping.contollers;
 
 import com.shop.shopping.entities.Product;
-import com.shop.shopping.entities.services.ProductService;
+import com.shop.shopping.services.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.shop.shopping.exceptions.ProductMinimumPriceException;
 
 import java.util.List;
 import java.net.URI;
@@ -28,6 +28,12 @@ public class ProductRestController {
     @GetMapping("{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         return ResponseEntity.of(service.findProductById(id));
+    }
+
+    @GetMapping(params = "min")
+    public List<Product> getProductsByMinPrice(@RequestParam(defaultValue = "0.0") double min) {
+        if (min < 0) throw new ProductMinimumPriceException(min);
+        return service.findAllProductsByMinPrice(min);
     }
 
     @PostMapping
